@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     let counter = document.getElementById(`counter`)
-    let num = 0
+    let plus = document.getElementById(`plus`)
+    let minus = document.getElementById(`minus`)
+    let heart = document.getElementById(`heart`)
     let dependCount = true
+    let num = 0
     const increment = () => num++
     const decrement = () => num--
 
@@ -11,21 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 1000)
 
-    let plus = document.getElementById(`plus`)
     plus.addEventListener(`click`, () => counter.textContent = increment())
-    
-    
-    let minus = document.getElementById(`minus`)
     minus.addEventListener(`click`, () => counter.textContent = decrement())
 
     const obj = {}
-    let heart = document.getElementById(`heart`)
     heart.addEventListener(`click`, () => {
         let counterContent = counter.textContent
         let li = document.createElement(`li`)
         let div = document.querySelector(`.likes`)
-        
-        
         if (counterContent in obj) {
             let uniqueID = document.getElementById(`${counterContent}`)
             uniqueID.textContent = `${counterContent} has been liked ${obj[counterContent]++} times`
@@ -35,24 +31,20 @@ document.addEventListener('DOMContentLoaded', () => {
             li.id = counterContent
             li.textContent = `${counterContent} has been liked 1 time`
         }
-  
     })
-
-    let pause = document.getElementById(`pause`)
+    
     pause.addEventListener(`click`, () => {
+        const disable = (...collect) => collect.forEach(btn => btn.disabled = true)
+        const enable = (...collect) => collect.forEach(btn => btn.disabled = false)
+        const pause = document.getElementById(`pause`)
+        dependCount = !dependCount
         if (pause.textContent === 'resume'){
             pause.textContent = ' pause '
-            plus.disabled = false
-            minus.disabled = false
-            heart.disabled = false
-            dependCount = true
+            return enable(plus, minus, heart)
         } else if (pause.textContent === ' pause '){
-            plus.disabled = true
-            minus.disabled = true
-            heart.disabled = true
             pause.textContent = 'resume'
-            dependCount = false
-            } 
+            return disable(plus, minus, heart)
+        } 
     })
 
     document.getElementById(`submit`).addEventListener(`click`, (e) => {
